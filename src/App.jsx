@@ -7,18 +7,22 @@ function App() {
     const [data, setData] = useState(db)
     const [cart, setCart]= useState([])
     function addToCart(item){
-        const itemExist = cart.findIndex(guitar => guitar.id==item.id)
+        const itemExist = cart.findIndex(guitar => guitar.id===item.id)
         if(itemExist >= 0) {//existee en el carrito
-            console.log('Ya existe')
+            const updatedCart=[...cart]
+            updatedCart[itemExist].quantity++
+            setCart(updatedCart)
         }else{
             item.quantity = 1
-            setCart(prevCart => [...prevCart, item])
+            setCart([...cart ,item])
         }
-        setCart([...cart ,item])
+        
     }
   return (
     <>
-    <Header/>
+    <Header
+        cart={cart}
+    />
     <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
 
