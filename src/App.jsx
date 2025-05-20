@@ -4,24 +4,48 @@ import Header from "./components/Header"
 import {db} from './data/db'
 
 function App() {
+
     const [data, setData] = useState(db)
     const [cart, setCart]= useState([])
+     
+    
+    const Max_Items = 5
+
     function addToCart(item){
-        const itemExist = cart.findIndex(guitar => guitar.id===item.id)
-        if(itemExist >= 0) {//existee en el carrito
-            const updatedCart=[...cart]
-            updatedCart[itemExist].quantity++
-            setCart(updatedCart)
+        const itemExist = cart.findIndex(guitar => guitar.id === item.id)
+        if(itemExist >= 0) {//existe en el carrito
+            const updateCart = [...cart]
+            updateCart[itemExist].quantity++
+            setCart(updateCart)
         }else{
             item.quantity = 1
-            setCart([...cart ,item])
+            setCart([...cart, item])
         }
-        
     }
+
+    function removeFromCart(id){
+        setCart(prevCart => prevCart.filter(guitar => guitar.id !== id))
+    }
+
+    function increaseQuantity (id){
+        const updatedCart = cart.map(item => {
+            if(item.id === id && item.quantity < Max_Items){
+                return{
+                    ...item,
+                    quantity: item.quantity + 1
+                }
+            }
+            return item
+        })
+        setCart(updatedCart)
+    }
+    
   return (
     <>
-    <Header
-        cart={cart}
+    <Header 
+    cart= {cart}
+    removeFromCart = {removeFromCart}
+    increaseQuantity = {increaseQuantity}
     />
     <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
